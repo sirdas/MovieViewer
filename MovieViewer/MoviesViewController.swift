@@ -72,11 +72,53 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
-        let baseUrl = "http://image.tmdb.org/t/p/w500"
+        //let baseUrl = "http://image.tmdb.org/t/p/w342"
         let posterPath = movie["poster_path"] as! String
-        let imageUrl = NSURL(string: baseUrl + posterPath)
+        //let imageUrl = NSURL(string: baseUrl + posterPath)
+        let smallUrl = "http://image.tmdb.org/t/p/w45"
+        let largeUrl = "http://image.tmdb.org/t/p/original"
+        //let imageRequest = NSURLRequest(URL: imageUrl!)
+        let smallImageRequest = NSURLRequest(URL: NSURL(string: smallUrl + posterPath)!)
+        let largeImageRequest = NSURLRequest(URL: NSURL(string: largeUrl + posterPath)!)
         
-        cell.posterView.setImageWithURL(imageUrl!)
+        cell.posterView.setImageWithURLRequest(
+            smallImageRequest,
+            placeholderImage: nil,
+            success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
+                
+                // imageResponse will be nil if the image is cached
+                if smallImageResponse != nil {
+                    print("Image was NOT cached, fade in image")
+                    cell.posterView.alpha = 0.0
+                    cell.posterView.image = smallImage
+                    UIView.animateWithDuration(0.3, animations: { () -> Void in
+                        cell.posterView.alpha = 1.0
+                    })
+                } else {
+                    print("Image was cached so just update the image")
+                    cell.posterView.image = smallImage
+                }
+                
+                cell.posterView.setImageWithURLRequest(
+                    largeImageRequest,
+                    placeholderImage: smallImage,
+                    success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                        
+                        cell.posterView.image = largeImage;
+                        
+                },
+                    failure: { (request, response, error) -> Void in
+                        // do something for the failure condition of the large image request
+                        // possibly setting the ImageView's image to a default image
+                })
+            },
+            failure: { (imageRequest, imageResponse, error) -> Void in
+                // do something for the failure condition
+            })
+                
+
+        
+        //cell.posterView.setImageWithURL(imageUrl!)
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         
