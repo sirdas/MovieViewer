@@ -12,7 +12,7 @@ import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
-
+    
     var movies: [NSDictionary]?
     
     override func viewDidLoad() {
@@ -54,7 +54,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         })
         task.resume()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -85,7 +85,6 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             smallImageRequest,
             placeholderImage: nil,
             success: { (smallImageRequest, smallImageResponse, smallImage) -> Void in
-                
                 // imageResponse will be nil if the image is cached
                 if smallImageResponse != nil {
                     print("Image was NOT cached, fade in image")
@@ -93,47 +92,41 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
                     cell.posterView.image = smallImage
                     UIView.animateWithDuration(0.3, animations: { () -> Void in
                         cell.posterView.alpha = 1.0
+                        }, completion: { (success) -> Void in
+                            cell.posterView.setImageWithURLRequest(largeImageRequest, placeholderImage: smallImage, success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                                cell.posterView.image = largeImage
+                                }, failure: { (largeImageRequest, largeImageResponse, error) -> Void in
+                                    cell.posterView.image = smallImage
+                            })
                     })
                 } else {
                     print("Image was cached so just update the image")
-                    cell.posterView.image = smallImage
+                    cell.posterView.setImageWithURLRequest(largeImageRequest, placeholderImage: smallImage, success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
+                        cell.posterView.image = largeImage
+                        }, failure: { (largeImageRequest, largeImageResponse, error) -> Void in
+                            cell.posterView.image = smallImage
+                    })
                 }
                 
-                cell.posterView.setImageWithURLRequest(
-                    largeImageRequest,
-                    placeholderImage: smallImage,
-                    success: { (largeImageRequest, largeImageResponse, largeImage) -> Void in
-                        
-                        cell.posterView.image = largeImage;
-                        
-                },
-                    failure: { (request, response, error) -> Void in
-                        // do something for the failure condition of the large image request
-                        // possibly setting the ImageView's image to a default image
-                })
-            },
-            failure: { (imageRequest, imageResponse, error) -> Void in
-                // do something for the failure condition
-            })
-                
-
-        
-        //cell.posterView.setImageWithURL(imageUrl!)
+            }, failure: { (smallImageRequest, smallImageResponse, error) -> Void in
+                cell.posterView.image = nil
+        })
+ 
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
         
         print("row \(indexPath.row)")
         return cell
     }
-
+    
     /*
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Get the new view controller using segue.destinationViewController.
+    // Pass the selected object to the new view controller.
     }
     */
-
+    
 }
