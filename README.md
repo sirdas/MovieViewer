@@ -2,7 +2,7 @@
 
 MovieViewer is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: 4 hours spent in total
+Time spent: 8 hours spent in total
 
 ## User Stories
 
@@ -18,12 +18,13 @@ The following **optional** features are implemented:
 - [ ] User sees an error message when there's a networking error.
 - [ ] Movies are displayed using a CollectionView instead of a TableView.
 - [ ] User can search for a movie.
-- [ ] All images fade in as they are loading.
+- [X] All images fade in as they are loading.
 - [ ] Customize the UI.
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [X] List anything else that you can get done to improve the app functionality!
+- Low res to hi res photos (low res cached)
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
@@ -34,14 +35,14 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://imgur.com/YVtsHSh.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/Jev3Q9k.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
 Describe any challenges encountered while building the app.
-Not much.
+Scope problem when using both low res and hi res images, as a result couldn't cache hi res photos
 
 ## License
 
