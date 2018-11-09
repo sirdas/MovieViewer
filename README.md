@@ -1,4 +1,4 @@
-# Project 1 - MovieViewer
+# Project 2 - MovieViewer
 
 MovieViewer is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
